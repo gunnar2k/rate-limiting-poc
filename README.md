@@ -20,7 +20,7 @@ This will initiate the `OrganizationWorker` child with an empty queue.
 
 ## `OrganizationWorker`
 
-Use to enqueue new requests. Internally, the worker processes the request queue of functions to be called.
+Use to enqueue new requests. Internally, the worker regularly processes the queue.
 
 Adding new requests can be done by:
 
