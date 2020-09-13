@@ -16,6 +16,8 @@ defmodule Receiver.Controller do
         send_resp(conn, 200, "Success")
 
       {:error, :no_slots_available} ->
+        IO.inspect("Error: No slots left!")
+
         send_resp(conn, 429, "Too many requests")
     end
   end
