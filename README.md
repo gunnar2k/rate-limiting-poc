@@ -10,8 +10,6 @@ Uses `DynamicSupervisor` to manage `OrganizationWorker` children.
 
 Enqueue new requests. The worker processes the `:queue` of functions to be called. The level of concurrency, ie. how many requests to make at the same time, can be predefined.
 
-Implemented with GenServer.
-
 ## Overview
 
 ![Overview](./docs/overview.png)
