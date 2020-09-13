@@ -1,50 +1,22 @@
 defmodule SenderTest do
   use ExUnit.Case
-  alias Sender.RateLimiter
+  alias Sender.{OrganizationSupervisor, OrganizationWorker}
 
-  describe "rate limiter" do
-    test "adding and listing organizations" do
-      assert :ok == RateLimiter.add_organization("org_id1")
-      assert :ok == RateLimiter.add_organization("org_id2")
-      assert :ok == RateLimiter.add_organization("org_id3")
+  test "sender" do
+    assert {:ok, _pid} = OrganizationSupervisor.add_organization(("org1"))
+    assert {:ok, _pid} = OrganizationSupervisor.add_organization(("org2"))
+    assert {:ok, _pid} = OrganizationSupervisor.add_organization(("org3"))
 
-      assert %{
-               "org_id1" => %{"queue" => {[], []}},
-               "org_id2" => %{"queue" => {[], []}},
-               "org_id3" => %{"queue" => {[], []}}
-             } == RateLimiter.list_organizations()
-    end
+    assert :ok == OrganizationWorker.enqueue("org1", fn -> nil end)
+    assert :ok == OrganizationWorker.enqueue("org1", fn -> nil end)
+    assert :ok == OrganizationWorker.enqueue("org1", fn -> nil end)
 
-    test "queuing function calls" do
-      assert :ok == RateLimiter.add_organization("org_id1")
+    assert :ok == OrganizationWorker.enqueue("org2", fn -> nil end)
+    assert :ok == OrganizationWorker.enqueue("org2", fn -> nil end)
+    assert :ok == OrganizationWorker.enqueue("org2", fn -> nil end)
 
-      :timer.sleep(2_000)
-
-      RateLimiter.push_to_queue("org_id1", fn ->
-        IO.puts("Started request")
-        :timer.sleep(2000)
-        IO.puts("Done request")
-      end)
-
-      :timer.sleep(10_000)
-    end
+    assert :ok == OrganizationWorker.enqueue("org3", fn -> nil end)
+    assert :ok == OrganizationWorker.enqueue("org3", fn -> nil end)
+    assert :ok == OrganizationWorker.enqueue("org3", fn -> nil end)
   end
-
-  # test "rate limiter" do
-  #   assert :ok == RateLimiter.add_organization("org_id1")
-  #   assert :ok == RateLimiter.add_organization("org_id2")
-  #   assert :ok == RateLimiter.add_organization("org_id3")
-
-  #   assert %{
-  #            "org_id1" => %{"queue" => {[], []}},
-  #            "org_id2" => %{"queue" => {[], []}},
-  #            "org_id3" => %{"queue" => {[], []}}
-  #          } == RateLimiter.list_organizations()
-
-  #   # RateLimiter.use_slot("org_id1", fn ->
-  #   #   IO.puts("Started request")
-  #   #   :timer.sleep(3000)
-  #   #   IO.puts("Done request")
-  #   # end)
-  # end
 end
