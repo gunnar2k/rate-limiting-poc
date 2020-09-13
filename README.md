@@ -6,7 +6,7 @@ Rate-limiting outbound requests to an external service where rates are set per o
 
 ## `OrganizationSupervisor`
 
-Uses `DynamicSupervisor` to manage an organizations outbound requests.
+Uses `DynamicSupervisor` to add new `OrganizationWorker`s.
 
 ## `OrganizationWorker`
 
