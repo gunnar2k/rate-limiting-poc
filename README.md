@@ -1,8 +1,6 @@
 # Rate limiting – poc
 
-Rate-limiting outbound requests to match an external service API limits, where the limits are set per organization/group.
-
-## Overview
+Rate-limiting outbound requests to match an external service API limits, where the rate and concurrency limits are set per organization/group.
 
 ![Overview](./docs/overview.png)
 
