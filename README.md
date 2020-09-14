@@ -9,18 +9,22 @@ Rate-limiting outbound requests to an external service. The limits are set per o
 
 ## `OrganizationSupervisor`
 
-New organization workers can be added by:
+A `DynamicSupervisor` implementation for managing `OrganizationWorker` children.
+
+A new organization worker can be added by:
 
 ```elixir
 OrganizationSupervisor.add_organization("org-id")
 ```
 
-This will initiate the `OrganizationWorker` child with an empty queue.
+This initiates the `OrganizationWorker` child with an empty queue.
+
+[Go to OrganizationSupervisor code](./lib/sender/organization_supervisor.ex).
 
 
 ## `OrganizationWorker`
 
-Use to enqueue new requests. Internally, the worker regularly processes the queue.
+Processes the queue of requests for the given organization. The level of concurrency (number of requests to pull from queue at one time) can be predefined in the `OrganizationWorker` module attribute `@concurrency` (default is 3).
 
 Adding new requests can be done by:
 
@@ -30,4 +34,4 @@ OrganizationWorker.enqueue("org-id", fn ->
 end)
 ```
 
-The function in the second argument will be added to the `OrganizationWorker`s internal `:queue` which the worker pulls from on a regular basis. The level of concurrency (number of requests to pull from queue) can be predefined in the `OrganizationWorker` module attribute `@concurrency` which defaults to 3.
+[Go to OrganizationWorker code](./lib/sender/organization_worker.ex).
